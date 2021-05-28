@@ -38,7 +38,9 @@ public interface NumberListContract {
 
     void onClickNumberListButton(int numeroVista);
 
-    int getNumber();
+      long getId();
+
+      int getNumber();
 
     List<NumberData> getNumberDataList();
   }

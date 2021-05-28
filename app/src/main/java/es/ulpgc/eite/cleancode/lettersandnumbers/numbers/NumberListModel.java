@@ -12,6 +12,8 @@ public class NumberListModel implements NumberListContract.Model {
     private String data;
 
     private int number;
+    private long id;
+
     private List<NumberData> numberDataList;
 
 
@@ -52,6 +54,15 @@ public class NumberListModel implements NumberListContract.Model {
         numberDataList.add(numero);
         setNumber(numero.number);
 
+    }
+
+    @Override
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override
