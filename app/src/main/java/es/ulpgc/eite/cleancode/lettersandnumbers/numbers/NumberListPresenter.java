@@ -1,6 +1,7 @@
 package es.ulpgc.eite.cleancode.lettersandnumbers.numbers;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import es.ulpgc.eite.cleancode.lettersandnumbers.app.AppMediator;
 import es.ulpgc.eite.cleancode.lettersandnumbers.app.LettersToNumbersState;
@@ -53,18 +54,10 @@ public class NumberListPresenter implements NumberListContract.Presenter {
   public void onResume() {
     // Log.e(TAG, "onResume()");
 
-    /*
-    // use passed state if is necessary
-    NumberListState savedState = router.getStateFromNextScreen();
-    if (savedState != null) {
-
-      // update the model if is necessary
-      model.onDataFromNextScreen(savedState.data);
-    }
-    */
 
     // call the model and update the state
     state.data = model.getStoredData();
+    state.datasource = new ArrayList<>();
 
     // update the view
     view.get().onDataUpdated(state);
@@ -121,6 +114,14 @@ public class NumberListPresenter implements NumberListContract.Presenter {
   @Override
   public void onClickNumberListButton() {
     // Log.e(TAG, "onClickNumberListButton()");
+
+    model.onClickNumberListButton(state.number);
+
+    state.datasource = model.getNumberDataList();
+    state.number = model.getNumber();
+
+    view.get().onDataUpdated(state);
+
   }
 
   @Override

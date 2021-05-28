@@ -9,6 +9,7 @@ public class NumberListViewModel {
 
   // put the view state here
   public String data;
+  public int number = 0;
   public List<NumberData> datasource;
 
   public NumberListViewModel() {
