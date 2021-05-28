@@ -1,6 +1,7 @@
 package es.ulpgc.eite.cleancode.lettersandnumbers.letters;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import es.ulpgc.eite.cleancode.lettersandnumbers.app.LettersToNumbersState;
 import es.ulpgc.eite.cleancode.lettersandnumbers.app.NumbersToLettersState;
@@ -35,7 +36,14 @@ public interface LetterListContract {
     String getStoredData();
     void onDataFromNextScreen(String data);
     void onRestartScreen(String data);
+
     void onDataFromPreviousScreen(String data);
+
+    void onClickLetterListButton(String data);
+
+    List<LetterData> getLetterDataList();
+
+    String getData();
   }
 
 

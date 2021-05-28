@@ -9,26 +9,26 @@ import es.ulpgc.eite.cleancode.lettersandnumbers.data.LetterData;
 
 public class LetterListPresenter implements LetterListContract.Presenter {
 
-  public static String TAG = LetterListPresenter.class.getSimpleName();
+    public static String TAG = LetterListPresenter.class.getSimpleName();
 
-  private WeakReference<LetterListContract.View> view;
-  private LetterListState state;
-  private LetterListContract.Model model;
-  private AppMediator mediator;
+    private WeakReference<LetterListContract.View> view;
+    private LetterListState state;
+    private LetterListContract.Model model;
+    private AppMediator mediator;
 
-  public LetterListPresenter(AppMediator mediator) {
-    this.mediator = mediator;
-    state = mediator.getLetterListState();
-  }
-
-  @Override
-  public void onStart() {
-    // Log.e(TAG, "onStart()");
-
-    // initialize the state if is necessary
-    if (state == null) {
-      state = new LetterListState();
+    public LetterListPresenter(AppMediator mediator) {
+        this.mediator = mediator;
+        state = mediator.getLetterListState();
     }
+
+    @Override
+    public void onStart() {
+        // Log.e(TAG, "onStart()");
+
+        // initialize the state if is necessary
+        if (state == null) {
+            state = new LetterListState();
+        }
 
     /*
     // use passed state if is necessary
@@ -40,56 +40,56 @@ public class LetterListPresenter implements LetterListContract.Presenter {
     }
     */
 
-  }
+    }
 
-  @Override
-  public void onRestart() {
-    // Log.e(TAG, "onRestart()");
+    @Override
+    public void onRestart() {
+        // Log.e(TAG, "onRestart()");
 
-    // update the model if is necessary
-    model.onRestartScreen(state.data);
-  }
+        // update the model if is necessary
+        model.onRestartScreen(state.data);
+    }
 
-  @Override
-  public void onResume() {
-    // Log.e(TAG, "onResume()");
+    @Override
+    public void onResume() {
+        // Log.e(TAG, "onResume()");
 
-    // use passed state if is necessary
-    NumbersToLettersState savedState = getStateFromNextScreen();
-    if (savedState != null) {
+        // use passed state if is necessary
+        NumbersToLettersState savedState = getStateFromNextScreen();
+        if (savedState != null) {
 
-      // update the model if is necessary
-      model.onDataFromNextScreen(savedState.data);
+            // update the model if is necessary
+            model.onDataFromNextScreen(savedState.data);
+        }
+
+
+        // call the model and update the state
+        state.data = model.getStoredData();
+
+        // update the view
+        view.get().onDataUpdated(state);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Log.e(TAG, "onBackPressed()");
+    }
+
+    @Override
+    public void onPause() {
+        // Log.e(TAG, "onPause()");
+    }
+
+    @Override
+    public void onDestroy() {
+        // Log.e(TAG, "onDestroy()");
     }
 
 
-    // call the model and update the state
-    state.data = model.getStoredData();
-
-    // update the view
-    view.get().onDataUpdated(state);
-
-  }
-
-  @Override
-  public void onBackPressed() {
-    // Log.e(TAG, "onBackPressed()");
-  }
-
-  @Override
-  public void onPause() {
-    // Log.e(TAG, "onPause()");
-  }
-
-  @Override
-  public void onDestroy() {
-    // Log.e(TAG, "onDestroy()");
-  }
-
-
-  private void passStateToNextScreen(LettersToNumbersState state) {
-    mediator.setNextLetterListScreenState(state);
-  }
+    private void passStateToNextScreen(LettersToNumbersState state) {
+        mediator.setNextLetterListScreenState(state);
+    }
 
   /*
   private void passStateToPreviousScreen(LetterListState state) {
@@ -101,28 +101,40 @@ public class LetterListPresenter implements LetterListContract.Presenter {
   }
   */
 
-  private NumbersToLettersState getStateFromNextScreen() {
-    return mediator.getNextLetterListScreenState();
-  }
+    private NumbersToLettersState getStateFromNextScreen() {
+        return mediator.getNextLetterListScreenState();
+    }
 
-  @Override
-  public void onClickLetterListCell(LetterData data) {
-    // Log.e(TAG, "onClickLetterListCell()");
-  }
+    @Override
+    public void onClickLetterListCell(LetterData data) {
+        // Log.e(TAG, "onClickLetterListCell()");
+        LettersToNumbersState state = new LettersToNumbersState();
+        state.data = this.state.data;
+        passStateToNextScreen(state);
+        view.get().navigateToNextScreen();
+    }
 
-  @Override
-  public void onClickLetterListButton() {
-    // Log.e(TAG, "onClickLetterListButton()");
-  }
+    @Override
+    public void onClickLetterListButton() {
+        // Log.e(TAG, "onClickLetterListButton()");
 
-  @Override
-  public void injectView(WeakReference<LetterListContract.View> view) {
-    this.view = view;
-  }
+        model.onClickLetterListButton(state.data);
 
-  @Override
-  public void injectModel(LetterListContract.Model model) {
-    this.model = model;
-  }
+        state.datasource = model.getLetterDataList();
+        state.data = model.getData();
+
+        view.get().onDataUpdated(state);
+
+    }
+
+    @Override
+    public void injectView(WeakReference<LetterListContract.View> view) {
+        this.view = view;
+    }
+
+    @Override
+    public void injectModel(LetterListContract.Model model) {
+        this.model = model;
+    }
 
 }
